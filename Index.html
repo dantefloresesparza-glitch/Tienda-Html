@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Caja Registradora POS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    html, body { width: 100%; height: 100%; background: #1a1d36; color: #fff; overflow: hidden; }
+    
+    /* Contenedor Principal Adaptable */
+    .container { display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+    
+    /* Panel Izquierdo: Productos y Herramientas */
+    .section-products { 
+      flex: 1; 
+      padding: 15px; 
+      border-right: 1px solid rgba(255,255,255,0.08); 
+      display: flex; 
+      flex-direction: column; 
+      min-width: 0; /* Previene desbordamiento en flexbox */
+      position: relative;
+    }
+    
+    /* Panel Derecho: Caja y Cobro */
+    .section-caja { 
+      flex: 1; 
+      padding: 15px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+      min-width: 0;
+    }
+    
+    h2 { font-size: 18px; margin-bottom: 10px; }
+    
+    /* Buscador adaptado sin desbordamientos */
+    .search-container { display: flex; gap: 8px; margin-bottom: 12px; width: 100%; }
+    .search-bar { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #fff; color: #333; outline: none; font-size: 14px; }
+    .btn-add-search { background: #2ecc71; color: #fff; border: none; border-radius: 8px; width: 42px; height: 42px; font-size: 20px; cursor: pointer; flex-shrink: 0; }
+    
+    /* Botones de acción del lado izquierdo */
+    .left-actions-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+    .btn-action-left { flex: 1; padding: 8px 10px; border-radius: 8px; border: none; color: #fff; font-weight: bold; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-receipt-action { background: #3498db; }
+    .btn-history-action { background: #9b59b6; }
+    .btn-delete-action { background: #e74c3c; }
+
+    /* Inputs de Caja */
+    .barcode-input-group { display: flex; gap: 8px; width: 100%; }
+    .input-field { width: 100%; min-width: 0; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: #fff; color: #333; outline: none; font-size: 14px; }
+    .btn-cam { background: #3498db; color: #fff; border: none; border-radius: 8px; padding: 0 14px; font-size: 18px; cursor: pointer; flex-shrink: 0; }
+    
+    /* Listas con Scroll Independiente */
+    .product-list, .cart-items { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+    .cart-items { background: #121427; border-radius: 8px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); }
+    
+    /* Tarjetas de Producto */
+    .product-card, .cart-item { background: #252952; padding: 10px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .cart-item { background: #1a1d3a; font-size: 13px; }
+    .product-info { cursor: pointer; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .product-info strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-info small { color: #a0a5c0; font-size: 11px; display: block; }
+    .btn-icon { background: none; border: none; font-size: 15px; cursor: pointer; padding: 2px 4px; }
+    
+    .btn-add-ticket { width: 100%; padding: 11px; border-radius: 8px; border: none; background: #e2e8f0; color: #2d3748; font-weight: bold; cursor: pointer; font-size: 14px; }
+    .total-display { background: #0f1123; padding: 14px; border-radius: 8px; text-align: center; font-size: 22px; font-weight: bold; margin-top: auto; }
+    .btn-pay { width: 100%; padding: 13px; border-radius: 8px; border: none; background: #2ecc71; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; }
+
+    /* Modales Adaptables */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #252952; padding: 18px; border-radius: 12px; width: 100%; max-width: 360px; max-height: 90vh; display: flex; flex-direction: column; gap: 10px; border: 1px solid rgba(255,255,255,0.1); overflow-y: auto; }
+    .modal h3 { text-align: center; font-size: 16px; }
+    .modal input { padding: 10px; border-radius: 6px; border: none; outline: none; font-size: 14px; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 5px; }
+    .modal-actions button { flex: 1; padding: 10px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .btn-cancel { background: #718096; color: #fff; }
+    .btn-save { background: #2ecc71; color: #fff; }
+    .btn-red { background: #e74c3c; color: #fff; }
+    .btn-ok { background: #3182ce; color: #fff; width: 100%; }
+
+    .ticket-paper { background: #fff; color: #111; padding: 12px; border-radius: 6px; font-family: monospace; display: flex; flex-direction: column; gap: 6px; }
+    .ticket-header { text-align: center; border-bottom: 1px dashed #666; padding-bottom: 6px; }
+    .ticket-line { display: flex; justify-content: space-between; font-size: 12px; }
+    .history-card { background: #1a1d3a; padding: 8px 10px; border-radius: 6px; font-size: 12px; display: flex; flex-direction: column; gap: 3px; border-left: 3px solid #2ecc71; }
+
+    /* Visor de Cámara */
+    .scanner-box { position: relative; width: 100%; height: 200px; background: #000; border-radius: 8px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+    .scanner-laser { position: absolute; width: 80%; height: 2px; background: #ff5f5f; box-shadow: 0 0 8px #ff5f5f; animation: scan 1.5s infinite ease-in-out; }
+    @keyframes scan { 0%, 100% { top: 15%; } 50% { top: 85%; } }
+
+    /* Ajuste responsivo para pantallas muy estrechas en vertical */
+    @media (max-width: 600px) {
+      .container { flex-direction: column; overflow-y: auto; }
+      body { overflow-y: auto; }
+      .section-products, .section-caja { height: auto; min-height: 50vh; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    }
+  </style>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="section-products">
+      <h2>Productos</h2>
+      
+      <div class="search-container">
+        <input type="text" id="search-input" class="search-bar" placeholder="Buscar..." oninput="filtrarProductos()">
+        <button class="btn-add-search" title="Nuevo Producto" onclick="abrirModalProd()">+</button>
+      </div>
+
+      <div class="left-actions-bar">
+        <button class="btn-action-left btn-receipt-action" title="Ver Ticket Actual" onclick="verTicketModal()">🧾 Ticket</button>
+        <button class="btn-action-left btn-history-action" title="Historial" onclick="verHistorialModal()">📜 Historial</button>
+        <button class="btn-action-left btn-delete-action" title="Vaciar Ticket" onclick="vaciarTicket()">🗑️ Vaciar</button>
+      </div>
+
+      <div class="product-list" id="product-list"></div>
+    </div>
+
+    <div class="section-caja">
+      <h2>Caja</h2>
+      <div class="barcode-input-group">
+        <input type="text" id="barcode-input" class="input-field" placeholder="Código de barras" autofocus>
+        <button class="btn-cam" title="Escanear Cámara" onclick="abrirEscanerCamara()">📷</button>
+      </div>
+      <input type="number" id="quantity-input" class="input-field" value="1" min="1">
+      <button class="btn-add-ticket" onclick="agregarPorCodigo()">Agregar al ticket</button>
+
+      <div class="cart-items" id="cart-items"></div>
+
+      <div class="total-display">Total: $<span id="total-amount">0.00</span></div>
+      <button class="btn-pay" onclick="procesarPago()">💵 Pagar</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-scanner">
+    <div class="modal">
+      <h3>Escanear Código</h3>
+      <div class="scanner-box">
+        <div id="reader" style="width:100%; height:100%;"></div>
+        <div class="scanner-laser"></div>
+      </div>
+      <p style="text-align:center; font-size:12px; color:#a0a5c0;">Apunta la cámara al código</p>
+      <button class="btn-cancel" onclick="cerrarEscanerCamara()">Cerrar Cámara</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-prod">
+    <div class="modal">
+      <h3 id="modal-prod-title">Nuevo Producto</h3>
+      <input type="hidden" id="prod-orig-code">
+      <input type="text" id="prod-code" placeholder="Código">
+      <input type="text" id="prod-name" placeholder="Nombre">
+      <input type="number" id="prod-price" placeholder="Precio ($)" step="0.01">
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="cerrarModal('modal-prod')">Cancelar</button>
+        <button class="btn-save" onclick="guardarProducto()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-ticket">
+    <div class="modal">
+      <div class="ticket-paper">
+        <div class="ticket-header">
+          <b>MI TIENDA POS</b>
+          <div id="ticket-datetime" style="font-size: 11px;"></div>
+        </div>
+        <div id="ticket-lines" style="max-height:180px; overflow-y:auto;"></div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; border-top:1px dashed #666; padding-top:6px;">
+          <span>TOTAL:</span><span id="ticket-total">$0.00</span>
+        </div>
+      </div>
+      <button class="btn-ok" onclick="cerrarModal('modal-ticket')">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-history">
+    <div class="modal">
+      <h3>Tickets Guardados</h3>
+      <div id="history-list" style="display:flex; flex-direction:column; gap:8px; max-height:260px; overflow-y:auto;"></div>
+      <div class="modal-actions">
+        <button class="btn-red" onclick="vaciarHistorial()">Borrar Historial</button>
+        <button class="btn-ok" onclick="cerrarModal('modal-history')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-msg">
+    <div class="modal">
+      <h3 id="msg-title">Aviso</h3>
+      <p id="msg-text" style="text-align:center; font-size:13px; color:#cbd5e0;"></p>
+      <div class="modal-actions" id="msg-actions"></div>
+    </div>
+  </div>
+
+  <script>
+    let inventario = JSON.parse(localStorage.getItem('pos_inventario')) || [
+      { codigo: "75010001", nombre: "rata", precio: 15.00 },
+      { codigo: "75010002", nombre: "Galletas Integrales", precio: 22.50 }
+    ];
+    let ventas = JSON.parse(localStorage.getItem('pos_ventas')) || [];
+    let carrito = [];
+    let html5QrCode = null;
+
+    const sonarPup = () => {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const playTone = (freq, type, dur, delay = 0) => setTimeout(() => {
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = type; o.frequency.value = freq;
+          g.gain.setValueAtTime(0.25, ctx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(); o.stop(ctx.currentTime + dur);
+        }, delay);
+        playTone(987.77, 'sine', 0.25); playTone(1318.51, 'triangle', 0.3, 40);
+      } catch(e){}
+    };
+
+    const $ = id => document.getElementById(id);
+    const abrirModal = id => $(id).classList.add('active');
+    const cerrarModal = id => $(id).classList.remove('active');
+
+    function renderProductos(lista = inventario) {
+      $('product-list').innerHTML = lista.map(p => `
+        <div class="product-card">
+          <div class="product-info" onclick="agregarAlCarrito('${p.codigo}')">
+            <strong>${p.nombre}</strong><small>Cód: ${p.codigo}</small>
+          </div>
+          <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
+            <b>$${p.precio.toFixed(2)}</b>
+            <button class="btn-icon" style="color:#f1c40f" onclick="abrirModalProd('${p.codigo}')">✏️</button>
+            <button class="btn-icon" style="color:#ff5f5f" onclick="borrarProdInv('${p.codigo}')">🗑️</button>
+          </div>
+        </div>
+      `).join('') || '<p style="text-align:center;color:#a0a5c0;padding:15px;font-size:13px;">Sin productos</p>';
+    }
+
+    function filtrarProductos() {
+      const q = $('search-input').value.toLowerCase();
+      renderProductos(inventario.filter(p => p.nombre.toLowerCase().includes(q) || p.codigo.includes(q)));
+    }
+
+    function agregarAlCarrito(codigo, qty = 1) {
+      const prod = inventario.find(p => p.codigo === codigo);
+      if (!prod) return mostrarAviso('Error', `El código "${codigo}" no existe en inventario.`);
+      for (let i = 0; i < qty; i++) carrito.push({ ...prod, cartId: Math.random() });
+      sonarPup(); renderCarrito();
+    }
+
+    function agregarPorCodigo() {
+      const cod = $('barcode-input').value.trim();
+      const qty = parseInt($('quantity-input').value) || 1;
+      if (cod) { agregarAlCarrito(cod, qty); $('barcode-input').value = ''; $('quantity-input').value = 1; $('barcode-input').focus(); }
+    }
+
+    function renderCarrito() {
+      let total = 0;
+      $('cart-items').innerHTML = carrito.map(i => {
+        total += i.precio;
+        return `
+          <div class="cart-item">
+            <div class="product-info"><strong>${i.nombre}</strong><small style="color:#a0a5c0">$${i.precio.toFixed(2)}</small></div>
+            <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+              <b>$${i.precio.toFixed(2)}</b> 
+              <button class="btn-icon" style="color:#ff5f5f" onclick="quitarItem(${i.cartId})">❌</button>
+            </div>
+          </div>`;
+      }).join('');
+      $('total-amount').innerText = total.toFixed(2);
+    }
+
+    const quitarItem = id => { carrito = carrito.filter(i => i.cartId !== id); renderCarrito(); };
+
+    function vaciarTicket() {
+      if (!carrito.length) return;
+      mostrarConfirm('Vaciar Ticket', '¿Deseas quitar todos los productos del ticket?', () => { carrito = []; renderCarrito(); });
+    }
+
+    function verTicketModal() {
+      if (!carrito.length) return mostrarAviso('Ticket Vacío', 'Agrega productos al ticket primero.');
+      $('ticket-datetime').innerText = new Date().toLocaleString();
+      let total = 0;
+      $('ticket-lines').innerHTML = carrito.map(i => {
+        total += i.precio;
+        return `<div class="ticket-line"><span>${i.nombre}</span><span>$${i.precio.toFixed(2)}</span></div>`;
+      }).join('');
+      $('ticket-total').innerText = `$${total.toFixed(2)}`;
+      abrirModal('modal-ticket');
+    }
+
+    /* ESCÁNER CON CÁMARA */
+    function abrirEscanerCamara() {
+      abrirModal('modal-scanner');
+      if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+      
+      html5QrCode.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 220, height: 140 } },
+        (decodedText) => {
+          $('barcode-input').value = decodedText;
+          agregarPorCodigo();
+          cerrarEscanerCamara();
+        },
+        () => {}
+      ).catch(err => {
+        mostrarAviso('Error de Cámara', 'No se pudo acceder a la cámara del dispositivo.');
+        cerrarEscanerCamara();
+      });
+    }
+
+    function cerrarEscanerCamara() {
+      if (html5QrCode && html5QrCode.isScanning) {
+        html5QrCode.stop().then(() => cerrarModal('modal-scanner')).catch(() => cerrarModal('modal-scanner'));
+      } else {
+        cerrarModal('modal-scanner');
+      }
+    }
+
+    /* PROCESAR PAGO Y GUARDAR VENTA */
+    function procesarPago() {
+      if (!carrito.length) return mostrarAviso('Vacío', 'No hay productos para cobrar.');
+      
+      const total = parseFloat($('total-amount').innerText);
+      const ticketGuardado = {
+        id: Date.now(),
+        fecha: new Date().toLocaleString(),
+        articulos: [...carrito],
+        total: total
+      };
+
+      ventas.unshift(ticketGuardado);
+      localStorage.setItem('pos_ventas', JSON.stringify(ventas));
+
+      sonarPup();
+      mostrarAviso('Venta Guardada 💵', `Total cobrado: $${total.toFixed(2)}\nGuardado en el historial.`);
+      carrito = []; 
+      renderCarrito();
+    }
+
+    /* HISTORIAL */
+    function verHistorialModal() {
+      if (!ventas.length) {
+        $('history-list').innerHTML = '<p style="text-align:center; color:#a0a5c0; padding:15px; font-size:13px;">No hay ventas registradas.</p>';
+      } else {
+        $('history-list').innerHTML = ventas.map(v => `
+          <div class="history-card">
+            <div style="display:flex; justify-content:space-between; font-weight:bold; color:#2ecc71;">
+              <span>Ticket #${v.id.toString().slice(-4)}</span>
+              <span>$${v.total.toFixed(2)}</span>
+            </div>
+            <small style="color:#cbd5e0;">📅 ${v.fecha}</small>
+            <small style="color:#a0a5c0;">📦 ${v.articulos.length} producto(s)</small>
+          </div>
+        `).join('');
+      }
+      abrirModal('modal-history');
+    }
+
+    function vaciarHistorial() {
+      if (!ventas.length) return;
+      mostrarConfirm('Borrar Historial', '¿Eliminar todos los tickets guardados?', () => {
+        ventas = [];
+        localStorage.removeItem('pos_ventas');
+        verHistorialModal();
+      });
+    }
+
+    function abrirModalProd(codigo = null) {
+      const esEdit = !!codigo;
+      const p = esEdit ? inventario.find(x => x.codigo === codigo) : { codigo: '', nombre: '', precio: '' };
+      $('modal-prod-title').innerText = esEdit ? 'Editar Producto' : 'Nuevo Producto';
+      $('prod-orig-code').value = codigo || '';
+      $('prod-code').value = p.codigo;
+      $('prod-name').value = p.nombre;
+      $('prod-price').value = p.precio;
+      abrirModal('modal-prod');
+    }
+
+    function guardarProducto() {
+      const orig = $('prod-orig-code').value;
+      const cod = $('prod-code').value.trim(), nom = $('prod-name').value.trim(), pre = parseFloat($('prod-price').value);
+      if (!cod || !nom || isNaN(pre) || pre <= 0) return mostrarAviso('Campos incompletos', 'Ingresa código, nombre y precio válidos.');
+      if (cod !== orig && inventario.some(p => p.codigo === cod)) return mostrarAviso('Error', 'Este código ya existe.');
+
+      if (orig) {
+        const idx = inventario.findIndex(p => p.codigo === orig);
+        inventario[idx] = { codigo: cod, nombre: nom, precio: pre };
+      } else {
+        inventario.push({ codigo: cod, nombre: nom, precio: pre });
+      }
+      localStorage.setItem('pos_inventario', JSON.stringify(inventario));
+      filtrarProductos(); cerrarModal('modal-prod'); sonarPup();
+    }
+
+    function borrarProdInv(codigo) {
+      mostrarConfirm('Eliminar', '¿Borrar producto del inventario?', () => {
+        inventario = inventario.filter(p => p.codigo !== codigo);
+        localStorage.setItem('pos_inventario', JSON.stringify(inventario));
+        filtrarProductos();
+      });
+    }
+
+    function mostrarAviso(titulo, texto) {
+      $('msg-title').innerText = titulo; $('msg-text').innerText = texto;
+      $('msg-actions').innerHTML = `<button class="btn-ok" onclick="cerrarModal('modal-msg')">Aceptar</button>`;
+      abrirModal('modal-msg');
+    }
+
+    function mostrarConfirm(titulo, texto, onOk) {
+      $('msg-title').innerText = titulo; $('msg-text').innerText = texto;
+      $('msg-actions').innerHTML = `
+        <button class="btn-cancel" onclick="cerrarModal('modal-msg')">Cancelar</button>
+        <button class="btn-red" id="btn-msg-ok">Confirmar</button>`;
+      $('btn-msg-ok').onclick = () => { onOk(); cerrarModal('modal-msg'); };
+      abrirModal('modal-msg');
+    }
+
+    $('barcode-input').addEventListener('keypress', e => e.key === 'Enter' && agregarPorCodigo());
+    renderProductos();
+  <
