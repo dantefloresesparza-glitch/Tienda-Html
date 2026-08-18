@@ -8,278 +8,309 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-html,body{height:100%;background:#1a1d36;color:#fff}
-body{overflow:hidden}
-.container{display:flex;height:100vh}
 
-section{
-flex:1;
-padding:15px;
-min-width:0;
-display:flex;
-flex-direction:column;
-gap:10px
+html,body{
+  height:100%;
+  background:#1a1d36;
+  color:#fff
 }
 
-.section-products{border-right:1px solid #ffffff14}
-.section-caja{overflow:hidden}
+body{overflow:hidden}
+
+.container{
+  display:flex;
+  height:100vh;
+}
+
+section{
+  flex:1;
+  padding:15px;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.section-products{
+  border-right:1px solid #ffffff14;
+}
+
+.section-caja{
+  overflow:hidden;
+}
+
 h2{font-size:18px}
 
-.search,.barcode{display:flex;gap:8px}
+.search,.barcode{
+  display:flex;
+  gap:8px;
+}
 
 input{
-padding:10px;
-border:0;
-border-radius:8px;
-outline:0;
-background:#fff;
-color:#333;
-width:100%
+  padding:10px;
+  border:0;
+  border-radius:8px;
+  outline:0;
+  background:#fff;
+  color:#333;
+  width:100%;
 }
 
 button{
-border:0;
-border-radius:8px;
-padding:10px;
-cursor:pointer;
-font-weight:bold
+  border:0;
+  border-radius:8px;
+  padding:10px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
 .add{
-background:#2ecc71;
-color:#fff;
-font-size:20px;
-width:42px
+  background:#2ecc71;
+  color:#fff;
+  font-size:20px;
+  width:42px;
 }
 
-.actions{display:flex;gap:8px}
-.actions button{flex:1;color:#fff;font-size:12px}
+.actions{
+  display:flex;
+  gap:8px;
+}
+
+.actions button{
+  flex:1;
+  color:#fff;
+  font-size:12px;
+}
 
 .ticketBtn{background:#3498db}
 .historyBtn{background:#9b59b6}
 .clearBtn{background:#e74c3c}
 
 .products,.cart{
-flex:1;
-min-height:0;
-overflow:auto;
-display:flex;
-flex-direction:column;
-gap:8px
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 .product,.item{
-background:#252952;
-padding:10px;
-border-radius:8px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:8px
+  background:#252952;
+  padding:10px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
 }
 
 .item{
-background:#1a1d3a;
-font-size:13px
+  background:#1a1d3a;
+  font-size:13px;
 }
 
 .info{
-flex:1;
-min-width:0;
-cursor:pointer
+  flex:1;
+  min-width:0;
+  cursor:pointer;
 }
 
 .info strong{
-display:block;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-small{color:#a0a5c0}
+small{
+  color:#a0a5c0;
+}
 
 .icons{
-display:flex;
-align-items:center;
-gap:5px
+  display:flex;
+  align-items:center;
+  gap:5px;
 }
 
 .icon{
-background:none;
-color:#fff;
-padding:2px;
-font-size:15px
+  background:none;
+  color:#fff;
+  padding:2px;
+  font-size:15px;
 }
 
 .total{
-background:#0f1123;
-padding:10px;
-border-radius:8px;
-text-align:center;
-font-size:20px;
-font-weight:bold;
-flex-shrink:0
+  background:#0f1123;
+  padding:10px;
+  border-radius:8px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  flex-shrink:0;
 }
 
 .pay{
-background:#2ecc71;
-color:#fff;
-font-size:16px;
-padding:12px;
-flex-shrink:0
+  background:#2ecc71;
+  color:#fff;
+  font-size:16px;
+  padding:12px;
+  flex-shrink:0;
 }
 
-/* PANTALLA COMPLETA */
+/* BOTÓN PANTALLA COMPLETA */
 .fullscreen{
-position:fixed;
-right:15px;
-top:15px;
-width:48px;
-height:48px;
-padding:0;
-border-radius:50%;
-background:#3498db;
-color:#fff;
-font-size:22px;
-z-index:9999;
-box-shadow:0 3px 12px #0008
+  position:fixed;
+  right:15px;
+  top:15px;
+  width:48px;
+  height:48px;
+  padding:0;
+  border-radius:50%;
+  background:#3498db;
+  color:#fff;
+  font-size:22px;
+  z-index:9999;
+  box-shadow:0 3px 12px #0008;
 }
 
 /* MODALES */
 .modal-bg{
-position:fixed;
-inset:0;
-background:#000b;
-display:none;
-align-items:center;
-justify-content:center;
-padding:15px;
-z-index:10000
+  position:fixed;
+  inset:0;
+  background:#000b;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:10;
 }
 
-.modal-bg.show{display:flex}
+.modal-bg.show{
+  display:flex;
+}
 
 .modal{
-background:#252952;
-padding:18px;
-border-radius:12px;
-width:100%;
-max-width:360px;
-max-height:90vh;
-overflow:auto;
-display:flex;
-flex-direction:column;
-gap:10px;
-border:1px solid #ffffff12;
-box-shadow:0 10px 30px #0009
+  background:#252952;
+  padding:18px;
+  border-radius:12px;
+  width:100%;
+  max-width:360px;
+  max-height:90vh;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.modal h3{text-align:center}
-
-.modal p{
-text-align:center;
-color:#cbd5e0;
-font-size:14px;
-line-height:1.4
+.modal h3{
+  text-align:center;
 }
 
 .modal-actions{
-display:flex;
-gap:8px
+  display:flex;
+  gap:8px;
 }
 
-.modal-actions button{flex:1}
+.modal-actions button{
+  flex:1;
+}
 
 .cancel{
-background:#718096;
-color:#fff
+  background:#718096;
+  color:#fff;
 }
 
 .save{
-background:#2ecc71;
-color:#fff
+  background:#2ecc71;
+  color:#fff;
 }
 
 .red{
-background:#e74c3c;
-color:#fff
+  background:#e74c3c;
+  color:#fff;
 }
 
 .ok{
-background:#3182ce;
-color:#fff;
-width:100%
+  background:#3182ce;
+  color:#fff;
+  width:100%;
 }
 
 .paper{
-background:#fff;
-color:#111;
-padding:12px;
-border-radius:6px;
-font-family:monospace
+  background:#fff;
+  color:#111;
+  padding:12px;
+  border-radius:6px;
+  font-family:monospace;
 }
 
 .paper-head{
-text-align:center;
-border-bottom:1px dashed #666;
-padding-bottom:6px
+  text-align:center;
+  border-bottom:1px dashed #666;
+  padding-bottom:6px;
 }
 
 .line{
-display:flex;
-justify-content:space-between;
-font-size:12px;
-padding:3px 0
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  padding:3px 0;
 }
 
 .history{
-background:#1a1d3a;
-padding:9px;
-border-radius:6px;
-border-left:3px solid #2ecc71;
-font-size:12px;
-display:flex;
-flex-direction:column;
-gap:3px
+  background:#1a1d3a;
+  padding:9px;
+  border-radius:6px;
+  border-left:3px solid #2ecc71;
+  font-size:12px;
 }
 
 .scanner{
-height:200px;
-background:#000;
-border-radius:8px;
-overflow:hidden
+  height:200px;
+  background:#000;
+  border-radius:8px;
+  overflow:hidden;
 }
 
 @media(max-width:600px){
 
-body{overflow:auto}
+  body{
+    overflow:auto;
+  }
 
-.container{
-height:auto;
-min-height:100vh;
-flex-direction:column
-}
+  .container{
+    height:auto;
+    min-height:100vh;
+    flex-direction:column;
+  }
 
-section{min-height:50vh}
+  section{
+    min-height:50vh;
+  }
 
-.section-products{
-border-right:0;
-border-bottom:1px solid #ffffff14
-}
+  .section-products{
+    border-right:0;
+    border-bottom:1px solid #ffffff14;
+  }
 
-.section-caja{
-min-height:50vh;
-height:50vh
-}
+  .section-caja{
+    min-height:50vh;
+    height:50vh;
+  }
 
-.cart{min-height:80px}
+  .cart{
+    min-height:80px;
+  }
 
-.total{
-padding:8px;
-font-size:20px
-}
+  .total{
+    padding:8px;
+    font-size:20px;
+  }
 
-.pay{padding:11px}
+  .pay{
+    padding:11px;
+  }
 }
 </style>
 </head>
@@ -307,6 +338,7 @@ font-size:20px
 
 </section>
 
+
 <section class="section-caja">
 
 <h2>Caja</h2>
@@ -332,20 +364,22 @@ Total: $<span id="total">0.00</span>
 
 </div>
 
+
 <!-- PANTALLA COMPLETA -->
 <button
-class="fullscreen"
-id="fullscreenBtn"
-onclick="pantallaCompleta()"
-title="Pantalla completa">
-⛶
+  class="fullscreen"
+  id="fullscreenBtn"
+  onclick="pantallaCompleta()"
+  title="Pantalla completa">
+  ⛶
 </button>
+
 
 <!-- ESCÁNER -->
 <div class="modal-bg" id="scannerModal">
 <div class="modal">
 
-<h3>📷 Escanear Código</h3>
+<h3>Escanear Código</h3>
 
 <div id="reader" class="scanner"></div>
 
@@ -355,6 +389,7 @@ Cerrar
 
 </div>
 </div>
+
 
 <!-- PRODUCTO -->
 <div class="modal-bg" id="productModal">
@@ -382,6 +417,7 @@ Guardar
 
 </div>
 </div>
+
 
 <!-- TICKET -->
 <div class="modal-bg" id="ticketModal">
@@ -412,17 +448,18 @@ Cerrar
 </div>
 </div>
 
+
 <!-- HISTORIAL -->
 <div class="modal-bg" id="historyModal">
 <div class="modal">
 
-<h3>📜 Tickets Guardados</h3>
+<h3>Tickets Guardados</h3>
 
 <div id="historyList"></div>
 
 <div class="modal-actions">
 
-<button class="red" onclick="confirmarBorrarHistorial()">
+<button class="red" onclick="borrarHistorial()">
 Borrar
 </button>
 
@@ -435,18 +472,26 @@ Cerrar
 </div>
 </div>
 
-<!-- AVISO / CONFIRMACIÓN -->
+
+<!-- AVISO -->
 <div class="modal-bg" id="msgModal">
 <div class="modal">
 
 <h3 id="msgTitle">Aviso</h3>
 
-<p id="msgText"></p>
+<p id="msgText" style="text-align:center;white-space:pre-line"></p>
 
-<div class="modal-actions" id="msgActions"></div>
+<div class="modal-actions">
+
+<button class="cancel" onclick="cerrar('msgModal')">
+Cerrar
+</button>
+
+</div>
 
 </div>
 </div>
+
 
 <script>
 
@@ -455,8 +500,8 @@ const $=id=>document.getElementById(id);
 let inventario=JSON.parse(
 localStorage.getItem("pos_inventario")
 )||[
-{codigo:"75010001",nombre:"rata",precio:15},
-{codigo:"75010002",nombre:"Galletas Integrales",precio:22.5}
+  {codigo:"75010001",nombre:"rata",precio:15},
+  {codigo:"75010002",nombre:"Galletas Integrales",precio:22.5}
 ];
 
 let ventas=JSON.parse(
@@ -467,755 +512,632 @@ let carrito=[];
 let scanner=null;
 
 
-/* GUARDAR INVENTARIO */
-
 function guardar(){
-localStorage.setItem(
-"pos_inventario",
-JSON.stringify(inventario)
-);
+  localStorage.setItem(
+    "pos_inventario",
+    JSON.stringify(inventario)
+  );
 }
 
-
-/* CERRAR MODAL */
 
 function cerrar(id){
-$(id).classList.remove("show");
+  $(id).classList.remove("show");
 }
 
-
-/* AVISO NORMAL */
 
 function aviso(t,m){
-
-$("msgTitle").textContent=t;
-$("msgText").textContent=m;
-
-$("msgActions").innerHTML=`
-<button class="ok" onclick="cerrar('msgModal')">
-Aceptar
-</button>
-`;
-
-$("msgModal").classList.add("show");
+  $("msgTitle").textContent=t;
+  $("msgText").textContent=m;
+  $("msgModal").classList.add("show");
 }
 
-
-/* MODAL DE CONFIRMACIÓN */
-
-function confirmar(t,m,accion){
-
-$("msgTitle").textContent=t;
-$("msgText").textContent=m;
-
-$("msgActions").innerHTML=`
-
-<button class="cancel"
-onclick="cerrar('msgModal')">
-Cancelar
-</button>
-
-<button class="red"
-id="confirmButton">
-Confirmar
-</button>
-
-`;
-
-$("confirmButton").onclick=()=>{
-cerrar("msgModal");
-accion();
-};
-
-$("msgModal").classList.add("show");
-}
-
-
-/* PRODUCTOS */
 
 function renderProductos(){
 
-let q=$("search").value.toLowerCase();
+  let q=$("search").value.toLowerCase();
 
-let lista=inventario.filter(p=>
-p.nombre.toLowerCase().includes(q)||
-p.codigo.includes(q)
-);
+  let lista=inventario.filter(p=>
+    p.nombre.toLowerCase().includes(q)||
+    p.codigo.includes(q)
+  );
 
-$("products").innerHTML=lista.map(p=>`
+  $("products").innerHTML=lista.map(p=>`
 
-<div class="product">
+    <div class="product">
 
-<div class="info"
-onclick="agregar('${p.codigo}')">
+      <div class="info" onclick="agregar('${p.codigo}')">
 
-<strong>${p.nombre}</strong>
+        <strong>${p.nombre}</strong>
 
-<small>
-Cód: ${p.codigo}
-</small>
+        <small>
+          Cód: ${p.codigo}
+        </small>
 
-</div>
+      </div>
 
-<div class="icons">
+      <div class="icons">
 
-<b>
-$${p.precio.toFixed(2)}
-</b>
+        <b>
+          $${p.precio.toFixed(2)}
+        </b>
 
-<button
-class="icon"
-onclick="producto('${p.codigo}')">
-✏️
-</button>
+        <button
+          class="icon"
+          onclick="producto('${p.codigo}')">
+          ✏️
+        </button>
 
-<button
-class="icon"
-onclick="eliminar('${p.codigo}')">
-🗑️
-</button>
+        <button
+          class="icon"
+          onclick="eliminar('${p.codigo}')">
+          🗑️
+        </button>
 
-</div>
+      </div>
 
-</div>
+    </div>
 
-`).join("")||
-"<p style='text-align:center;color:#a0a5c0'>Sin productos</p>";
+  `).join("")||
+  "<p style='text-align:center;color:#a0a5c0'>Sin productos</p>";
 }
 
-
-/* AGREGAR */
 
 function agregar(codigo,cantidad=1){
 
-let p=inventario.find(
-x=>x.codigo===codigo
-);
+  let p=inventario.find(
+    x=>x.codigo===codigo
+  );
 
-if(!p){
+  if(!p){
 
-aviso(
-"❌ Error",
-`El código "${codigo}" no existe.`
-);
+    aviso(
+      "Error",
+      `El código "${codigo}" no existe.`
+    );
 
-return false;
+    return false;
+  }
+
+  for(let i=0;i<cantidad;i++){
+
+    carrito.push({
+      ...p,
+      id:Date.now()+Math.random()
+    });
+
+  }
+
+  renderCarrito();
+
+  return true;
 }
 
-for(let i=0;i<cantidad;i++){
-
-carrito.push({
-...p,
-id:Date.now()+Math.random()
-});
-
-}
-
-renderCarrito();
-
-return true;
-}
-
-
-/* AGREGAR POR CÓDIGO */
 
 function agregarCodigo(){
 
-let codigo=$("code").value.trim();
+  let codigo=$("code").value.trim();
 
-let cantidad=
-parseInt($("qty").value)||1;
+  let cantidad=
+    parseInt($("qty").value)||1;
 
-if(!codigo){
+  if(!codigo){
 
-aviso(
-"⚠️ Código vacío",
-"Introduce un código."
-);
+    aviso(
+      "Código vacío",
+      "Introduce un código."
+    );
 
-return;
+    return;
+  }
+
+  if(agregar(codigo,cantidad)){
+
+    $("code").value="";
+    $("qty").value=1;
+    $("code").focus();
+
+  }
 }
 
-if(agregar(codigo,cantidad)){
-
-$("code").value="";
-$("qty").value=1;
-$("code").focus();
-
-}
-}
-
-
-/* CARRITO */
 
 function renderCarrito(){
 
-let total=0;
+  let total=0;
 
-$("cart").innerHTML=
-carrito.map(p=>{
+  $("cart").innerHTML=carrito.map(p=>{
 
-total+=p.precio;
+    total+=p.precio;
 
-return`
+    return`
 
-<div class="item">
+      <div class="item">
 
-<div class="info">
+        <div class="info">
 
-<strong>
-${p.nombre}
-</strong>
+          <strong>${p.nombre}</strong>
 
-<small>
-$${p.precio.toFixed(2)}
-</small>
+          <small>
+            $${p.precio.toFixed(2)}
+          </small>
 
-</div>
+        </div>
 
-<div class="icons">
+        <div class="icons">
 
-<b>
-$${p.precio.toFixed(2)}
-</b>
+          <b>
+            $${p.precio.toFixed(2)}
+          </b>
 
-<button
-class="icon"
-onclick="quitar(${p.id})">
-❌
-</button>
+          <button
+            class="icon"
+            onclick="quitar(${p.id})">
+            ❌
+          </button>
 
-</div>
+        </div>
 
-</div>
+      </div>
 
-`;
+    `;
 
-}).join("")||
+  }).join("")||
+  "<p style='text-align:center;color:#a0a5c0'>Ticket vacío</p>";
 
-"<p style='text-align:center;color:#a0a5c0'>
-Ticket vacío
-</p>";
-
-$("total").textContent=
-total.toFixed(2);
+  $("total").textContent=
+    total.toFixed(2);
 }
 
-
-/* QUITAR */
 
 function quitar(id){
 
-carrito=carrito.filter(
-p=>p.id!==id
-);
+  carrito=carrito.filter(
+    p=>p.id!==id
+  );
 
-renderCarrito();
+  renderCarrito();
 }
 
-
-/* VACIAR TICKET */
 
 function vaciar(){
 
-if(!carrito.length){
+  if(!carrito.length)return;
 
-aviso(
-"Ticket vacío",
-"No hay productos que quitar."
-);
+  if(confirm("¿Vaciar el ticket?")){
 
-return;
+    carrito=[];
+
+    renderCarrito();
+
+  }
 }
 
-confirmar(
-"🗑️ Vaciar ticket",
-"¿Quieres quitar todos los productos del ticket?",
-()=>{
-
-carrito=[];
-
-renderCarrito();
-
-}
-);
-}
-
-
-/* TICKET */
 
 function ticket(){
 
-if(!carrito.length){
+  if(!carrito.length){
 
-aviso(
-"Ticket vacío",
-"Agrega productos primero."
-);
+    aviso(
+      "Ticket vacío",
+      "Agrega productos primero."
+    );
 
-return;
+    return;
+  }
+
+  let total=0;
+
+  $("date").textContent=
+    new Date().toLocaleString();
+
+  $("ticketLines").innerHTML=
+    carrito.map(p=>{
+
+      total+=p.precio;
+
+      return`
+
+        <div class="line">
+
+          <span>
+            ${p.nombre}
+          </span>
+
+          <span>
+            $${p.precio.toFixed(2)}
+          </span>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+  $("ticketTotal").textContent=
+    "$"+total.toFixed(2);
+
+  $("ticketModal").classList.add(
+    "show"
+  );
 }
 
-let total=0;
-
-$("date").textContent=
-new Date().toLocaleString();
-
-$("ticketLines").innerHTML=
-carrito.map(p=>{
-
-total+=p.precio;
-
-return`
-
-<div class="line">
-
-<span>
-${p.nombre}
-</span>
-
-<span>
-$${p.precio.toFixed(2)}
-</span>
-
-</div>
-
-`;
-
-}).join("");
-
-$("ticketTotal").textContent=
-"$"+total.toFixed(2);
-
-$("ticketModal").classList.add("show");
-}
-
-
-/* PAGAR */
 
 function pagar(){
 
-if(!carrito.length){
+  if(!carrito.length){
 
-aviso(
-"Ticket vacío",
-"No hay productos para cobrar."
-);
+    aviso(
+      "Ticket vacío",
+      "No hay productos para cobrar."
+    );
 
-return;
+    return;
+  }
+
+  let total=
+    carrito.reduce(
+      (s,p)=>s+p.precio,
+      0
+    );
+
+  ventas.unshift({
+
+    id:Date.now(),
+
+    fecha:
+      new Date().toLocaleString(),
+
+    articulos:
+      carrito.map(p=>({
+        nombre:p.nombre,
+        precio:p.precio
+      })),
+
+    total
+
+  });
+
+  localStorage.setItem(
+    "pos_ventas",
+    JSON.stringify(ventas)
+  );
+
+  carrito=[];
+
+  renderCarrito();
+
+  aviso(
+    "Venta guardada 💵",
+    `Total cobrado: $${total.toFixed(2)}`
+  );
 }
 
-let total=
-carrito.reduce(
-(s,p)=>s+p.precio,
-0
-);
-
-ventas.unshift({
-
-id:Date.now(),
-
-fecha:
-new Date().toLocaleString(),
-
-articulos:
-carrito.map(p=>({
-nombre:p.nombre,
-precio:p.precio
-})),
-
-total
-
-});
-
-localStorage.setItem(
-"pos_ventas",
-JSON.stringify(ventas)
-);
-
-carrito=[];
-
-renderCarrito();
-
-aviso(
-"💵 Venta guardada",
-`Total cobrado: $${total.toFixed(2)}`
-);
-}
-
-
-/* HISTORIAL */
 
 function historial(){
 
-$("historyList").innerHTML=
-ventas.length?
+  $("historyList").innerHTML=
+    ventas.length?
 
-ventas.map(v=>`
+    ventas.map(v=>`
 
-<div class="history">
+      <div class="history">
 
-<b>
-Ticket #${String(v.id).slice(-4)}
-&nbsp; $${v.total.toFixed(2)}
-</b>
+        <b>
+          Ticket #${String(v.id).slice(-4)}
+          $${v.total.toFixed(2)}
+        </b>
 
-<small>
-📅 ${v.fecha}
-</small>
+        <small>
+          📅 ${v.fecha}
+        </small>
 
-<small>
-📦 ${v.articulos.length} producto(s)
-</small>
+        <small>
+          📦 ${v.articulos.length} producto(s)
+        </small>
 
-</div>
+      </div>
 
-`).join("")
+    `).join("")
 
-:
+    :
 
-"<p style='text-align:center;color:#a0a5c0'>
-No hay ventas.
-</p>";
+    "<p style='text-align:center;color:#a0a5c0'>No hay ventas.</p>";
 
-$("historyModal").classList.add("show");
+  $("historyModal").classList.add(
+    "show"
+  );
 }
 
 
-/* CONFIRMAR BORRAR HISTORIAL */
+function borrarHistorial(){
 
-function confirmarBorrarHistorial(){
+  if(!ventas.length)return;
 
-if(!ventas.length){
+  if(confirm("¿Borrar todo el historial?")){
 
-aviso(
-"Historial vacío",
-"No hay tickets guardados."
-);
+    ventas=[];
 
-return;
+    localStorage.removeItem(
+      "pos_ventas"
+    );
+
+    historial();
+
+  }
 }
 
-confirmar(
-"🗑️ Borrar historial",
-"¿Quieres eliminar todos los tickets guardados?",
-()=>{
-
-ventas=[];
-
-localStorage.removeItem(
-"pos_ventas"
-);
-
-historial();
-
-}
-);
-}
-
-
-/* PRODUCTO */
 
 function producto(codigo=null){
 
-let p=codigo?
+  let p=codigo?
 
-inventario.find(
-x=>x.codigo===codigo
-):
+    inventario.find(
+      x=>x.codigo===codigo
+    )
 
-{
-codigo:"",
-nombre:"",
-precio:""
-};
+    :
 
-$("productTitle").textContent=
-codigo?
-"Editar Producto":
-"Nuevo Producto";
+    {
+      codigo:"",
+      nombre:"",
+      precio:""
+    };
 
-$("oldCode").value=
-codigo||"";
+  $("productTitle").textContent=
+    codigo?
+    "Editar Producto":
+    "Nuevo Producto";
 
-$("productCode").value=
-p.codigo;
+  $("oldCode").value=
+    codigo||"";
 
-$("productName").value=
-p.nombre;
+  $("productCode").value=
+    p.codigo;
 
-$("productPrice").value=
-p.precio;
+  $("productName").value=
+    p.nombre;
 
-$("productModal").classList.add(
-"show"
-);
+  $("productPrice").value=
+    p.precio;
+
+  $("productModal").classList.add(
+    "show"
+  );
 }
 
-
-/* GUARDAR PRODUCTO */
 
 function guardarProducto(){
 
-let old=
-$("oldCode").value;
+  let old=
+    $("oldCode").value;
 
-let codigo=
-$("productCode").value.trim();
+  let codigo=
+    $("productCode").value.trim();
 
-let nombre=
-$("productName").value.trim();
+  let nombre=
+    $("productName").value.trim();
 
-let precio=
-parseFloat(
-$("productPrice").value
-);
+  let precio=
+    parseFloat(
+      $("productPrice").value
+    );
 
-if(
-!codigo||
-!nombre||
-isNaN(precio)||
-precio<=0
-){
+  if(
+    !codigo||
+    !nombre||
+    isNaN(precio)||
+    precio<=0
+  ){
 
-aviso(
-"⚠️ Error",
-"Completa correctamente todos los campos."
-);
+    aviso(
+      "Error",
+      "Completa correctamente todos los campos."
+    );
 
-return;
+    return;
+  }
+
+  if(
+    codigo!==old&&
+    inventario.some(
+      p=>p.codigo===codigo
+    )
+  ){
+
+    aviso(
+      "Error",
+      "Ese código ya existe."
+    );
+
+    return;
+  }
+
+  if(old){
+
+    let i=
+      inventario.findIndex(
+        p=>p.codigo===old
+      );
+
+    inventario[i]={
+      codigo,
+      nombre,
+      precio
+    };
+
+  }else{
+
+    inventario.push({
+      codigo,
+      nombre,
+      precio
+    });
+
+  }
+
+  guardar();
+
+  renderProductos();
+
+  cerrar("productModal");
 }
 
-if(
-codigo!==old&&
-inventario.some(
-p=>p.codigo===codigo
-)
-){
-
-aviso(
-"⚠️ Código existente",
-"Ese código ya existe."
-);
-
-return;
-}
-
-if(old){
-
-let i=
-inventario.findIndex(
-p=>p.codigo===old
-);
-
-inventario[i]={
-codigo,
-nombre,
-precio
-};
-
-}else{
-
-inventario.push({
-codigo,
-nombre,
-precio
-});
-
-}
-
-guardar();
-
-renderProductos();
-
-cerrar("productModal");
-
-aviso(
-"✅ Producto guardado",
-"El producto se guardó correctamente."
-);
-}
-
-
-/* ELIMINAR PRODUCTO */
 
 function eliminar(codigo){
 
-let p=inventario.find(
-x=>x.codigo===codigo
-);
+  if(!confirm(
+    "¿Eliminar este producto?"
+  ))return;
 
-if(!p)return;
+  inventario=
+    inventario.filter(
+      p=>p.codigo!==codigo
+    );
 
-confirmar(
-"🗑️ Eliminar producto",
-`¿Quieres eliminar "${p.nombre}" del inventario?`,
-()=>{
+  guardar();
 
-inventario=
-inventario.filter(
-p=>p.codigo!==codigo
-);
-
-guardar();
-
-renderProductos();
-
-aviso(
-"✅ Producto eliminado",
-"El producto fue eliminado del inventario."
-);
-
-}
-);
+  renderProductos();
 }
 
-
-/* CÁMARA */
 
 async function camara(){
 
-if(typeof Html5Qrcode==="undefined"){
+  if(typeof Html5Qrcode==="undefined"){
 
-aviso(
-"❌ Error",
-"No se pudo cargar el escáner."
-);
+    aviso(
+      "Error",
+      "No se pudo cargar el escáner."
+    );
 
-return;
+    return;
+  }
+
+  $("scannerModal").classList.add(
+    "show"
+  );
+
+  try{
+
+    scanner=
+      new Html5Qrcode("reader");
+
+    await scanner.start(
+
+      {facingMode:"environment"},
+
+      {
+        fps:10,
+        qrbox:{
+          width:220,
+          height:140
+        }
+      },
+
+      codigo=>{
+
+        $("code").value=
+          codigo;
+
+        cerrarCamara();
+
+        agregarCodigo();
+
+      }
+
+    );
+
+  }catch(e){
+
+    cerrarCamara();
+
+    aviso(
+      "Error de cámara",
+      "No se pudo acceder a la cámara."
+    );
+
+  }
 }
 
-$("scannerModal").classList.add("show");
-
-try{
-
-scanner=
-new Html5Qrcode("reader");
-
-await scanner.start(
-
-{facingMode:"environment"},
-
-{
-fps:10,
-qrbox:{
-width:220,
-height:140
-}
-},
-
-codigo=>{
-
-$("code").value=
-codigo;
-
-cerrarCamara();
-
-agregarCodigo();
-
-}
-
-);
-
-}catch(e){
-
-cerrarCamara();
-
-aviso(
-"📷 Error de cámara",
-"No se pudo acceder a la cámara."
-);
-
-}
-}
-
-
-/* CERRAR CÁMARA */
 
 async function cerrarCamara(){
 
-try{
+  try{
 
-if(scanner)
-await scanner.stop();
+    if(scanner)
+      await scanner.stop();
 
-}catch(e){}
+  }catch(e){}
 
-try{
+  try{
 
-if(scanner)
-scanner.clear();
+    if(scanner)
+      scanner.clear();
 
-}catch(e){}
+  }catch(e){}
 
-scanner=null;
+  scanner=null;
 
-cerrar("scannerModal");
+  cerrar(
+    "scannerModal"
+  );
 }
 
 
 /* PANTALLA COMPLETA */
-
 async function pantallaCompleta(){
 
-try{
+  try{
 
-if(!document.fullscreenElement){
+    if(!document.fullscreenElement){
 
-await document.documentElement.requestFullscreen();
+      await document.documentElement.requestFullscreen();
 
-}else{
+    }else{
 
-await document.exitFullscreen();
+      await document.exitFullscreen();
 
+    }
+
+  }catch(e){
+
+    aviso(
+      "Pantalla completa",
+      "Tu navegador no permite activar pantalla completa."
+    );
+
+  }
 }
 
-}catch(e){
-
-aviso(
-"Pantalla completa",
-"Tu navegador no permite activar esta función."
-);
-
-}
-}
-
-
-/* ICONO PANTALLA COMPLETA */
 
 document.addEventListener(
-"fullscreenchange",
-()=>{
+  "fullscreenchange",
+  ()=>{
 
-$("fullscreenBtn").textContent=
-document.fullscreenElement?
-"↙":
-"⛶";
+    $("fullscreenBtn").textContent=
+      document.fullscreenElement?
+      "↙":
+      "⛶";
 
-}
+  }
 );
 
-
-/* ENTER */
 
 $("code").addEventListener(
-"keydown",
-e=>{
-if(e.key==="Enter")
-agregarCodigo();
-}
+  "keydown",
+  e=>{
+    if(e.key==="Enter")
+      agregarCodigo();
+  }
 );
+
 
 $("qty").addEventListener(
-"keydown",
-e=>{
-if(e.key==="Enter")
-agregarCodigo();
-}
+  "keydown",
+  e=>{
+    if(e.key==="Enter")
+      agregarCodigo();
+  }
 );
 
-
-/* INICIO */
 
 renderProductos();
 renderCarrito();
